@@ -8,3 +8,7 @@ class Config(BaseSettings):
         alias="BINANCE_WEBSOCKETS_URL",
         default="wss://stream.binance.com:9443/ws",
     )
+    database_url: str = Field(
+        alias="DATABASE_URL",
+        default="postgres://my_user:my_password@localhost:5432/my_database",  # заміни на свій
+    )

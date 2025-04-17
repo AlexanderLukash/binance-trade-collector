@@ -1,4 +1,8 @@
 *.idea
+.idea/
 *.pyc
 *.venv
 .venv
+venv/
+.venv/
+*.venv/

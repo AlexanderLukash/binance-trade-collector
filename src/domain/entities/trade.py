@@ -9,6 +9,4 @@ class TradeEntity(BaseEntity):
     trade_id: int
     price: float
     quantity: float
-    buyer_order_id: int
-    seller_order_id: int
     is_buyer_market_maker: bool

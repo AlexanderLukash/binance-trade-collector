@@ -1,23 +1,17 @@
 [project]
 name = "binance-trade-collector"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "AlexanderLukash",email = "sashass20062727@gmail.com"}
-]
-license = {text = "MIT"}
-readme = "README.md"
+description = "Add your description here"
 requires-python = ">=3.13"
 dependencies = [
-    "websockets (>=15.0.1,<16.0.0)",
-    "websocket (>=0.2.1,<0.3.0)"
+    "betterlogging>=1.0.0",
+    "punq>=0.7.0",
+    "pydantic>=2.11.3",
+    "pydantic-settings>=2.8.1",
+    "websockets>=15.0.1",
 ]
 
-
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.group.dev.dependencies]
-pre-commit = "^4.2.0"
-
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]

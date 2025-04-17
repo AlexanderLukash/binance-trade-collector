@@ -5,6 +5,7 @@ ENV = --env-file .env
 APP_FILE = docker_compose/app.yaml
 STORAGES_FILE = docker_compose/storages.yaml
 APP_CONTAINER = main-app
+DB_CONTAINER = example-db
 KAFKA = docker_compose/kafka.yaml
 
 

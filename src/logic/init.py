@@ -4,7 +4,12 @@ from punq import Container, Scope
 
 from src.infra.filesystem.base import BaseAssetsProviders
 from src.infra.filesystem.file_assets import FileAssetProvider
+from src.infra.repositories.trade.base import BaseTradeRepository
+from src.infra.repositories.trade.models.trade import TradeModel
+from src.infra.repositories.trade.postgresql import TradePostgresRepository
 from src.infra.websockets.managers import BaseConnectionManager, ConnectionManager
+from src.logic.services.base import BaseTradeService
+from src.logic.services.trade import ORMTradeService
 from src.settings.config import Config
 
 
@@ -39,6 +44,28 @@ def _init_container() -> Container:
     container.register(
         BaseAssetsProviders,
         factory=init_assets_provider,
+        scope=Scope.singleton,
+    )
+
+    def init_trade_repo() -> BaseTradeRepository:
+        return TradePostgresRepository(
+            _db_url=config.database_url,
+            models=[TradeModel],
+        )
+
+    container.register(
+        BaseTradeRepository,
+        factory=init_trade_repo,
+        scope=Scope.singleton,
+    )
+
+    def init_trade_service() -> BaseTradeService:
+        trade_repo = container.resolve(BaseTradeRepository)
+        return ORMTradeService(trade_repo=trade_repo)
+
+    container.register(
+        BaseTradeService,
+        factory=init_trade_service,
         scope=Scope.singleton,
     )
 

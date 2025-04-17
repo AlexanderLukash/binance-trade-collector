@@ -5,9 +5,9 @@ from src.domain.entities.trade import TradeEntity
 
 
 @dataclass
-class BaseTradeRepository(ABC):
+class BaseTradeService(ABC):
     @abstractmethod
-    async def save_trade(self, trade: TradeEntity): ...
+    async def create_trade(self, trade: TradeEntity): ...
 
     @abstractmethod
     async def delete_old_trades(self): ...

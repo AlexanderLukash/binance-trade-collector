@@ -1,13 +1,14 @@
 import asyncio
 import logging
 
-from punq import Container
 
 from src.domain.converters.trade import convert_data_to_entity
 from src.infra.filesystem.base import BaseAssetsProviders
 from src.infra.websockets.managers import BaseConnectionManager
 from src.logic.init import init_container
 from src.settings.logger import setup_logging
+
+from punq import Container
 
 setup_logging()
 logger = logging.getLogger(__name__)

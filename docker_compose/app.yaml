@@ -1,0 +1,20 @@
+services:
+  main-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    container_name: main-app
+    command: "uv run main.py"
+    env_file:
+      - ../.env
+    volumes:
+      - ..:/app/
+    depends_on:
+      - postgres
+
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge

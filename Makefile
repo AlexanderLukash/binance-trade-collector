@@ -4,7 +4,7 @@ LOGS = docker logs
 ENV = --env-file .env
 APP_FILE = docker_compose/app.yaml
 STORAGES_FILE = docker_compose/storages.yaml
-APP_CONTAINER = main-app
+APP_CONTAINER = trade-collector-app
 DB_CONTAINER = example-db
 KAFKA = docker_compose/kafka.yaml
 

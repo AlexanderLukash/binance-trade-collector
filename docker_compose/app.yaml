@@ -3,7 +3,7 @@ services:
     build:
       context: ..
       dockerfile: Dockerfile
-    container_name: main-app
+    container_name: trade-collector-app
     command: "uv run main.py"
     env_file:
       - ../.env
@@ -18,3 +18,4 @@ services:
 networks:
   backend:
     driver: bridge
+    external: true

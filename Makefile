@@ -11,7 +11,7 @@ KAFKA = docker_compose/kafka.yaml
 
 .PHONY: storages
 storages:
-	${DC} -f ${STORAGES_FILE} ${ENV_FILE} up -d
+	${DC} -f ${STORAGES_FILE} ${ENV_FILE} up --build -d
 
 .PHONY: storages-down
 storages-down:
@@ -27,7 +27,7 @@ storages-logs:
 
 .PHONY: app
 app:
-	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} ${ENV_FILE} up -d
+	${DC} -f ${APP_FILE} -f ${STORAGES_FILE} ${ENV_FILE} up --build -d
 
 .PHONY: app-logs
 app-logs:

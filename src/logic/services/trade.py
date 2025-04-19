@@ -14,3 +14,6 @@ class ORMTradeService(BaseTradeService):
 
     async def delete_old_trades(self):
         await self.trade_repo.delete_old_trades()
+
+    async def create_trade_batch(self, trades: list[TradeEntity]):
+        await self.trade_repo.save_trade_batch(trades=trades)

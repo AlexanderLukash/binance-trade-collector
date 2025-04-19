@@ -11,3 +11,6 @@ class BaseTradeRepository(ABC):
 
     @abstractmethod
     async def delete_old_trades(self): ...
+
+    @abstractmethod
+    async def save_trade_batch(self, trades: list[TradeEntity]): ...

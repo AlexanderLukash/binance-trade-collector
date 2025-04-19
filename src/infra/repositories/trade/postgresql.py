@@ -1,4 +1,5 @@
 import logging
+import time
 from dataclasses import dataclass
 from datetime import datetime, timedelta
 
@@ -56,4 +57,24 @@ class TradePostgresRepository(BaseTradeRepository, BasePostgresRepository):
         deleted_count = await TradeModel.filter(created_at__lt=cutoff_date).delete()
         logger.info(
             f"Deleted {deleted_count} old trades older than {cutoff_date.isoformat()}",
+        )
+
+    async def save_trade_batch(self, trades: list[TradeEntity]):
+        start_time = time.time()
+        await TradeModel.bulk_create(
+            [
+                TradeModel(
+                    oid=trade.oid,
+                    symbol=trade.symbol,
+                    trade_id=trade.trade_id,
+                    price=trade.price,
+                    quantity=trade.quantity,
+                    is_buyer_market_maker=trade.is_buyer_market_maker,
+                    created_at=trade.created_at,
+                )
+                for trade in trades
+            ],
+        )
+        logger.info(
+            f"Saved {len(trades)} trades in {time.time() - start_time:.2f} seconds",
         )

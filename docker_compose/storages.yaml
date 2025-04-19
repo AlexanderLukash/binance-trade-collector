@@ -1,19 +1,17 @@
 version: '3.9'
 
 services:
-  postgres:
-    image: postgres:latest
+  timescaledb:
+    image: timescale/timescaledb:latest-pg16
     container_name: example-db
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgres/data
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - ../.env
-
     networks:
       - backend
-
 
 volumes:
   postgres_data:

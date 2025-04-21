@@ -6,6 +6,7 @@ from src.infra.filesystem.base import BaseAssetsProviders
 from src.infra.filesystem.file_assets import FileAssetProvider
 from src.infra.repositories.trade.base import BaseTradeRepository
 from src.infra.repositories.trade.models.trade import TradeModel
+from src.infra.repositories.trade.models.trade_stat import TradeStatModel
 from src.infra.repositories.trade.postgresql import TradePostgresRepository
 from src.infra.websockets.managers import BaseConnectionManager, ConnectionManager
 from src.logic.services.base import BaseTradeService
@@ -50,7 +51,7 @@ def _init_container() -> Container:
     def init_trade_repo() -> BaseTradeRepository:
         return TradePostgresRepository(
             _db_url=config.database_url,
-            models=[TradeModel],
+            models=[TradeModel, TradeStatModel],
         )
 
     container.register(

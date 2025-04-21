@@ -14,3 +14,9 @@ class BaseTradeService(ABC):
 
     @abstractmethod
     async def create_trade_batch(self, trades: list[TradeEntity]): ...
+
+    @abstractmethod
+    async def update_or_create_trade(self, trade: TradeEntity): ...
+
+    @abstractmethod
+    async def update_stat_by_trade(self, trade: TradeEntity): ...

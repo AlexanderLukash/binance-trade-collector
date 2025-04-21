@@ -4,7 +4,7 @@ from datetime import datetime
 
 class TradeModel(models.Model):
     id = fields.BigIntField(pk=True)
-    symbol = fields.CharField(max_length=20, index=True)
+    symbol = fields.CharField(max_length=20, index=True, unique=True)
     trade_id = fields.BigIntField()
     price = fields.FloatField()
     quantity = fields.FloatField()

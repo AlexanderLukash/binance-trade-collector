@@ -17,3 +17,9 @@ class ORMTradeService(BaseTradeService):
 
     async def create_trade_batch(self, trades: list[TradeEntity]):
         await self.trade_repo.save_trade_batch(trades=trades)
+
+    async def update_or_create_trade(self, trade: TradeEntity):
+        await self.trade_repo.update_or_save_trade(trade=trade)
+
+    async def update_stat_by_trade(self, trade: TradeEntity):
+        await self.trade_repo.update_stat(trade=trade)

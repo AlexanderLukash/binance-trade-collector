@@ -1,7 +1,6 @@
 import logging
-import time
 from dataclasses import dataclass
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from tortoise import Tortoise
 from tortoise.models import Model
@@ -11,6 +10,7 @@ from typing import Type
 from src.domain.entities.trade import TradeEntity
 from src.infra.repositories.trade.base import BaseTradeRepository
 from src.infra.repositories.trade.models.trade import TradeModel
+from src.infra.repositories.trade.models.trade_stat import TradeStatModel
 
 logger = logging.getLogger(__name__)
 
@@ -60,7 +60,6 @@ class TradePostgresRepository(BaseTradeRepository, BasePostgresRepository):
         )
 
     async def save_trade_batch(self, trades: list[TradeEntity]):
-        start_time = time.time()
         await TradeModel.bulk_create(
             [
                 TradeModel(
@@ -76,5 +75,54 @@ class TradePostgresRepository(BaseTradeRepository, BasePostgresRepository):
             ],
         )
         logger.info(
-            f"Saved {len(trades)} trades in {time.time() - start_time:.2f} seconds",
+            f"Saved {len(trades)} trades.",
         )
+
+    async def update_or_save_trade(self, trade: TradeEntity):
+        await TradeModel.update_or_create(
+            defaults={
+                "trade_id": trade.trade_id,
+                "price": trade.price,
+                "quantity": trade.quantity,
+                "is_buyer_market_maker": trade.is_buyer_market_maker,
+                "created_at": trade.created_at,
+            },
+            symbol=trade.symbol,
+        )
+        logger.info(f"Trade for {trade.symbol} updated or created.")
+
+    async def update_stat(self, trade: TradeEntity):
+        stat = await TradeStatModel.filter(symbol=trade.symbol).first()
+        now = datetime.now(timezone.utc)
+
+        if not stat:
+            await TradeStatModel.create(
+                symbol=trade.symbol,
+                min_price=trade.price,
+                max_price=trade.price,
+                avg_price=trade.price,
+                trades_count=1,
+                last_updated=now,
+                stat_reset_time=now,
+            )
+        else:
+            if now - stat.stat_reset_time > timedelta(hours=24):
+                stat.min_price = trade.price
+                stat.max_price = trade.price
+                stat.avg_price = trade.price
+                stat.trades_count = 1
+                stat.stat_reset_time = now
+            else:
+                stat.min_price = min(stat.min_price, trade.price)
+                stat.max_price = max(stat.max_price, trade.price)
+                stat.avg_price = round(
+                    (stat.avg_price * stat.trades_count + trade.price)
+                    / (stat.trades_count + 1),
+                    5,
+                )
+                stat.trades_count += 1
+
+            stat.last_updated = now
+            await stat.save()
+
+        logger.info(f"Updated stats for {trade.symbol}")
